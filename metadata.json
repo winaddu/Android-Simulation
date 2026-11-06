@@ -1,0 +1,6 @@
+{
+  "name": "SideHub AI Workspace",
+  "description": "An intelligent productivity workspace and AI council launcher with Firebase Auth, Firestore persistence, and multi-model Gemini intelligence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

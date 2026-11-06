@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidWorkspace(data) {
+      return data.keys().hasAll(['userId', 'title', 'category', 'createdAt']) &&
+             data.userId is string &&
+             data.title is string && data.title.size() > 0 &&
+             data.category is string;
+    }
+
+    function isValidShortcut(data) {
+      return data.keys().hasAll(['userId', 'title', 'url', 'createdAt']) &&
+             data.userId is string &&
+             data.title is string && data.title.size() > 0 &&
+             data.url is string;
+    }
+
+    function isValidChatSession(data) {
+      return data.keys().hasAll(['userId', 'title', 'modelName', 'createdAt']) &&
+             data.userId is string &&
+             data.title is string && data.title.size() > 0 &&
+             data.modelName is string;
+    }
+
+    match /users/{userId}/workspaces/{workspaceId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidWorkspace(request.resource.data) && request.resource.data.userId == userId;
+      allow update: if isOwner(userId) && isValidWorkspace(request.resource.data) && request.resource.data.userId == userId;
+      allow delete: if isOwner(userId);
+    }
+
+    match /users/{userId}/shortcuts/{shortcutId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidShortcut(request.resource.data) && request.resource.data.userId == userId;
+      allow update: if isOwner(userId) && isValidShortcut(request.resource.data) && request.resource.data.userId == userId;
+      allow delete: if isOwner(userId);
+    }
+
+    match /users/{userId}/chats/{chatId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidChatSession(request.resource.data) && request.resource.data.userId == userId;
+      allow update: if isOwner(userId) && isValidChatSession(request.resource.data) && request.resource.data.userId == userId;
+      allow delete: if isOwner(userId);
+
+      match /messages/{messageId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+  }
+}

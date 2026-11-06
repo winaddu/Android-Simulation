@@ -1,0 +1,36 @@
+{
+  "entities": {
+    "Workspace": {
+      "path": "users/{userId}/workspaces/{workspaceId}",
+      "schema": {
+        "userId": "string",
+        "title": "string",
+        "description": "string",
+        "category": "string",
+        "createdAt": "timestamp",
+        "updatedAt": "timestamp"
+      }
+    },
+    "Shortcut": {
+      "path": "users/{userId}/shortcuts/{shortcutId}",
+      "schema": {
+        "userId": "string",
+        "title": "string",
+        "url": "string",
+        "icon": "string",
+        "workspaceId": "string",
+        "createdAt": "timestamp"
+      }
+    },
+    "ChatSession": {
+      "path": "users/{userId}/chats/{chatId}",
+      "schema": {
+        "userId": "string",
+        "title": "string",
+        "modelName": "string",
+        "systemInstruction": "string",
+        "createdAt": "timestamp"
+      }
+    }
+  }
+}
